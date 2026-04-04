@@ -25,11 +25,11 @@ fn main() -> Result<(), io::Error> {
 
     loop {
         terminal.draw(|frame| {
-            ui::render(frame, &user_input);
+            ui::render(frame, &user_input, &todo, &doing, &done);
         })?;
 
         if let Event::Key(key) = event::read()? {
-            keybinds::handle_keybinds(key, &mut user_input);
+            keybinds::handle_keybinds(key, &mut user_input, &mut todo);
         }
     }
 }

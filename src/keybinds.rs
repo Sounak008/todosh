@@ -1,7 +1,8 @@
 use crossterm::event::{KeyCode, KeyEvent, KeyEventKind};
 use crossterm::terminal::disable_raw_mode;
 
-pub fn handle_keybinds(key: KeyEvent, user_input: &mut String) {
+pub fn handle_keybinds(key: KeyEvent, user_input: &mut String, todo_tasks: &mut Vec<String>) {
+    let task: String = user_input.drain(..).collect();
     if key.kind == KeyEventKind::Press {
         match key.code {
             KeyCode::Char('q') => {
@@ -14,14 +15,20 @@ pub fn handle_keybinds(key: KeyEvent, user_input: &mut String) {
             }
             KeyCode::Enter => {
                 if !user_input.is_empty() {
+                    todo_tasks.push(task);
                     user_input.clear();
                 }
             }
             KeyCode::Backspace => {
-                user_input.pop();
+                if !user_input.is_empty() {
+                    user_input.pop();
+                }
             }
             KeyCode::Char(c) => {
-                user_input.push(c);
+                if !user_input.is_empty() {
+                    user_input.push(c);
+                }
+                
             }
             _ => {}
         }

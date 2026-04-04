@@ -1,7 +1,7 @@
 use ratatui::prelude::*;
 use ratatui::widgets::{Block, Borders, Paragraph};
 
-pub fn render(frame: &mut Frame, user_input: &str) {
+pub fn render(frame: &mut Frame, user_input: &str, todo: &[String], doing: &[String], done: &[String]) {
     // Vertical Layout
     let main_container = Layout::default()
         .direction(Direction::Vertical)
@@ -55,4 +55,7 @@ pub fn render(frame: &mut Frame, user_input: &str) {
         Paragraph::new("done").alignment(Alignment::Center).block(Block::new().borders(Borders::ALL)),
         task_containers[2],
     );
+
+    
+
 }
