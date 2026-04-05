@@ -1,4 +1,4 @@
-use crossterm::event::{KeyCode, KeyEvent, KeyEventKind};
+use crossterm::event::{KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 use crossterm::terminal::disable_raw_mode;
 
 pub fn handle_keybinds(
@@ -11,7 +11,7 @@ pub fn handle_keybinds(
     selected_index: &mut usize,
 
 ) {
-    let corrent_column_list = match *selected_column {
+    let current_column_list = match *selected_column {
         0 => todo_list.len(),
         1 => doing_list.len(),
         2 => done_list.len(),
@@ -43,13 +43,45 @@ pub fn handle_keybinds(
                 
             }
             KeyCode::Left => {
-                if *selected_column > 0 {
+                if key.modifiers.contains(KeyModifiers::SHIFT) {
+                    match *selected_column {
+                        2 => {
+                            if !done_list.is_empty() {
+                                let task = done_list.remove(*selected_index);
+                                doing_list.push(task);
+                            }
+                        }
+                        1 => {
+                            if !doing_list.is_empty() {
+                                let task = doing_list.remove(*selected_index);
+                                todo_list.push(task);
+                            }
+                        }
+                        _ => {}
+                    }
+                } else if *selected_column > 0 {
                     *selected_index = 0;
                     *selected_column -= 1;
                 }
             }
             KeyCode::Right => {
-                if *selected_column < 2 {
+                if key.modifiers.contains(KeyModifiers::SHIFT) {
+                    match *selected_column {
+                        0 => {
+                            if !todo_list.is_empty() {
+                                let task = todo_list.remove(*selected_index);
+                                doing_list.push(task);
+                            }
+                        }
+                        1 => {
+                            if !doing_list.is_empty() {
+                                let task = doing_list.remove(*selected_index);
+                                done_list.push(task);
+                            }
+                        }
+                        _ => {}
+                    }
+                } else if *selected_column < 2 {
                     *selected_index = 0;
                     *selected_column += 1;
                 }
@@ -60,7 +92,7 @@ pub fn handle_keybinds(
                 }
             }
             KeyCode::Down => {
-                if corrent_column_list > 0 && *selected_index < corrent_column_list - 1 {
+                if current_column_list > 0 && *selected_index < current_column_list - 1 {
                     *selected_index += 1;
                 }
             }

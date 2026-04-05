@@ -1,5 +1,5 @@
 use ratatui::prelude::*;
-use ratatui::widgets::{Block, Borders, List, ListItem, Paragraph};
+use ratatui::widgets::{Block, Borders, List, ListItem, ListState, Paragraph};
 
 pub fn render(
     frame: &mut Frame,
@@ -46,7 +46,7 @@ pub fn render(
         main_container[0],
     );
 
-    // Input Box (Bottom) - Using the variable passed into the function
+    // Input Box (Bottom)
     frame.render_widget(
         Paragraph::new(format!(" enter task: {}", user_input))
             .alignment(Alignment::Left)
@@ -54,45 +54,63 @@ pub fn render(
         main_container[2],
     );
 
-    // 1. TODO Border (Index 0)
-    let todo_color = if *selected_column == 0 {
-        Color::Green
+    // Styling
+    let (todo_color, todo_bg) = if *selected_column == 0 {
+        (Color::Green, Color::Indexed(236))
     } else {
-        Color::Indexed(8)
+        (Color::Indexed(8), Color::Reset)
     };
+
     let todo_block = Block::default()
         .title(" todo ")
         .borders(Borders::ALL)
         .border_style(Style::default().fg(todo_color));
 
-    // 2. DOING Border (Index 1)
-    let doing_color = if *selected_column == 1 {
-        Color::Green
+    let (doing_color, doing_bg) = if *selected_column == 1 {
+        (Color::Green, Color::Indexed(236))
     } else {
-        Color::Indexed(8)
+        (Color::Indexed(8), Color::Reset)
     };
+
     let doing_block = Block::default()
         .title(" doing ")
         .borders(Borders::ALL)
         .border_style(Style::default().fg(doing_color));
 
-    // 3. DONE Border (Index 2)
-    let done_color = if *selected_column == 2 {
-        Color::Green
+    let (done_color, done_bg) = if *selected_column == 2 {
+        (Color::Green, Color::Indexed(236))
     } else {
-        Color::Indexed(8)
+        (Color::Indexed(8), Color::Reset)
     };
+
     let done_block = Block::default()
         .title(" done ")
         .borders(Borders::ALL)
         .border_style(Style::default().fg(done_color));
 
-    
-    let todo_list = List::new(todo_items).block(todo_block);
-    let doing_list = List::new(doing_items).block(doing_block);
-    let done_list = List::new(done_items).block(done_block);
+    let todo_list = List::new(todo_items)
+        .block(todo_block)
+        .highlight_symbol(Span::styled(">> ", Style::default().fg(Color::Blue)))
+        .highlight_style(Style::default().bg(todo_bg));
+    let doing_list = List::new(doing_items)
+        .block(doing_block)
+        .highlight_symbol(Span::styled(">> ", Style::default().fg(Color::Blue)))
+        .highlight_style(Style::default().bg(doing_bg));
+    let done_list = List::new(done_items)
+        .block(done_block)
+        .highlight_symbol(Span::styled(">> ", Style::default().fg(Color::Blue)))
+        .highlight_style(Style::default().bg(done_bg));
 
-    frame.render_widget(todo_list, task_containers[0]);
-    frame.render_widget(doing_list, task_containers[1]);
-    frame.render_widget(done_list, task_containers[2]);
+    // States
+    let mut todo_state = ListState::default();
+    let mut doing_state = ListState::default();
+    let mut done_state = ListState::default();
+
+    todo_state.select((*selected_column == 0).then_some(*selected_index));
+    doing_state.select((*selected_column == 1).then_some(*selected_index));
+    done_state.select((*selected_column == 2).then_some(*selected_index));
+
+    frame.render_stateful_widget(todo_list, task_containers[0], &mut todo_state);
+    frame.render_stateful_widget(doing_list, task_containers[1], &mut doing_state);
+    frame.render_stateful_widget(done_list, task_containers[2], &mut done_state);
 }
