@@ -58,7 +58,7 @@ pub fn render(
     let todo_color = if *selected_column == 0 {
         Color::Green
     } else {
-        Color::White
+        Color::Indexed(8)
     };
     let todo_block = Block::default()
         .title(" todo ")
@@ -69,7 +69,7 @@ pub fn render(
     let doing_color = if *selected_column == 1 {
         Color::Green
     } else {
-        Color::White
+        Color::Indexed(8)
     };
     let doing_block = Block::default()
         .title(" doing ")
@@ -80,7 +80,7 @@ pub fn render(
     let done_color = if *selected_column == 2 {
         Color::Green
     } else {
-        Color::White
+        Color::Indexed(8)
     };
     let done_block = Block::default()
         .title(" done ")
