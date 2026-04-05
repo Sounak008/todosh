@@ -9,9 +9,8 @@ pub fn handle_keybinds(
     done_list: &mut Vec<String>,
     selected_column: &mut usize,
     selected_index: &mut usize,
-
 ) {
-    let current_column_list = match *selected_column {
+    let current_column_len = match *selected_column {
         0 => todo_list.len(),
         1 => doing_list.len(),
         2 => done_list.len(),
@@ -33,14 +32,37 @@ pub fn handle_keybinds(
                     todo_list.push(task);
                 }
             }
+            KeyCode::Delete => {
+                match *selected_column {
+                    0 => {
+                        if !todo_list.is_empty() {
+                            todo_list.remove(*selected_index);
+                        }
+                    }
+                    1 => {
+                        if !doing_list.is_empty() {
+                            doing_list.remove(*selected_index);
+                        }
+                    }
+                    2 => {
+                        if !done_list.is_empty() {
+                            done_list.remove(*selected_index);
+                        }
+                    }
+                    _ => {}
+                }
+
+                if *selected_index >= current_column_len && current_column_len > 0 {
+                    *selected_index = current_column_len - 1;
+                }
+            }
             KeyCode::Backspace => {
                 if !user_input.is_empty() {
                     user_input.pop();
                 }
             }
             KeyCode::Char(c) => {
-                    user_input.push(c);
-                
+                user_input.push(c);
             }
             KeyCode::Left => {
                 if key.modifiers.contains(KeyModifiers::SHIFT) {
@@ -92,7 +114,7 @@ pub fn handle_keybinds(
                 }
             }
             KeyCode::Down => {
-                if current_column_list > 0 && *selected_index < current_column_list - 1 {
+                if current_column_len > 0 && *selected_index < current_column_len - 1 {
                     *selected_index += 1;
                 }
             }
