@@ -54,6 +54,12 @@ pub fn render(
         main_container[2],
     );
 
+    // Cursor
+    let cursor_x = main_container[2].x + user_input.len() as u16 + 14;
+    let cursor_y = main_container[2].y + 1;
+
+    frame.set_cursor_position((cursor_x, cursor_y));
+
     // Styling
     let (todo_color, todo_bg) = if *selected_column == 0 {
         (Color::Green, Color::Indexed(236))
