@@ -61,7 +61,7 @@ pub fn render(
     frame.set_cursor_position((cursor_x, cursor_y));
 
     // Styling
-    let (todo_color, todo_bg) = if *selected_column == 0 {
+    let (todo_color, _) = if *selected_column == 0 {
         (Color::Green, Color::Indexed(236))
     } else {
         (Color::Indexed(8), Color::Reset)
@@ -72,7 +72,7 @@ pub fn render(
         .borders(Borders::ALL)
         .border_style(Style::default().fg(todo_color));
 
-    let (doing_color, doing_bg) = if *selected_column == 1 {
+    let (doing_color, _) = if *selected_column == 1 {
         (Color::Green, Color::Indexed(236))
     } else {
         (Color::Indexed(8), Color::Reset)
@@ -83,7 +83,7 @@ pub fn render(
         .borders(Borders::ALL)
         .border_style(Style::default().fg(doing_color));
 
-    let (done_color, done_bg) = if *selected_column == 2 {
+    let (done_color, _) = if *selected_column == 2 {
         (Color::Green, Color::Indexed(236))
     } else {
         (Color::Indexed(8), Color::Reset)
@@ -96,16 +96,13 @@ pub fn render(
 
     let todo_list = List::new(todo_items)
         .block(todo_block)
-        .highlight_symbol(Span::styled(">> ", Style::default().fg(Color::Blue)))
-        .highlight_style(Style::default().bg(todo_bg));
+        .highlight_symbol(Span::styled(">> ", Style::default().fg(Color::Blue)));
     let doing_list = List::new(doing_items)
         .block(doing_block)
-        .highlight_symbol(Span::styled(">> ", Style::default().fg(Color::Blue)))
-        .highlight_style(Style::default().bg(doing_bg));
+        .highlight_symbol(Span::styled(">> ", Style::default().fg(Color::Blue)));
     let done_list = List::new(done_items)
         .block(done_block)
-        .highlight_symbol(Span::styled(">> ", Style::default().fg(Color::Blue)))
-        .highlight_style(Style::default().bg(done_bg));
+        .highlight_symbol(Span::styled(">> ", Style::default().fg(Color::Blue)));
 
     // States
     let mut todo_state = ListState::default();
