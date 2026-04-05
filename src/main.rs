@@ -31,7 +31,7 @@ fn main() -> Result<(), io::Error> {
         })?;
 
         if let Event::Key(key) = event::read()? {
-            keybinds::handle_keybinds(key, &mut user_input, &mut todo, &mut selected_column, &mut selected_index);
+            keybinds::handle_keybinds(key, &mut user_input, &mut todo, &mut doing, &mut done, &mut selected_column, &mut selected_index);
         }
     }
 }
