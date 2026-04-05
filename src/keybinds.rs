@@ -11,7 +11,6 @@ pub fn handle_keybinds(
     selected_index: &mut usize,
 
 ) {
-    let task: String = user_input.drain(..).collect();
     let corrent_column_list = match *selected_column {
         0 => todo_list.len(),
         1 => doing_list.len(),
@@ -30,8 +29,8 @@ pub fn handle_keybinds(
             }
             KeyCode::Enter => {
                 if !user_input.is_empty() {
+                    let task: String = user_input.drain(..).collect();
                     todo_list.push(task);
-                    user_input.clear();
                 }
             }
             KeyCode::Backspace => {
@@ -40,9 +39,7 @@ pub fn handle_keybinds(
                 }
             }
             KeyCode::Char(c) => {
-                if !user_input.is_empty() {
                     user_input.push(c);
-                }
                 
             }
             KeyCode::Left => {
