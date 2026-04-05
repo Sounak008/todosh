@@ -46,13 +46,13 @@ pub fn handle_keybinds(
                 
             }
             KeyCode::Left => {
-                if *selected_column < 0 {
+                if *selected_column > 0 {
                     *selected_index = 0;
                     *selected_column -= 1;
                 }
             }
             KeyCode::Right => {
-                if *selected_column > 2 {
+                if *selected_column < 2 {
                     *selected_index = 0;
                     *selected_column += 1;
                 }
@@ -63,7 +63,7 @@ pub fn handle_keybinds(
                 }
             }
             KeyCode::Down => {
-                if *selected_index < corrent_column_list - 1 {
+                if corrent_column_list > 0 && *selected_index < corrent_column_list - 1 {
                     *selected_index += 1;
                 }
             }
