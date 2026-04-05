@@ -1,5 +1,6 @@
 mod ui;
 mod keybinds;
+mod storage;
 
 use crossterm::{
     event::{self, Event},
@@ -8,6 +9,8 @@ use crossterm::{
 };
 use ratatui::{Terminal, backend::CrosstermBackend};
 use std::io;
+
+use crate::storage::{save_tasks, load_tasks};
 
 fn main() -> Result<(), io::Error> {
     enable_raw_mode()?;
@@ -19,9 +22,10 @@ fn main() -> Result<(), io::Error> {
 
     let mut user_input = String::new();
 
-    let mut todo= Vec::<String>::new();
-    let mut doing = Vec::<String>::new();
-    let mut done = Vec::<String>::new();
+    let data = load_tasks();
+    let mut todo = data.todo;
+    let mut doing = data.doing;
+    let mut done = data.done;
     let mut selected_column = 0;
     let mut selected_index = 0;
 
@@ -33,5 +37,7 @@ fn main() -> Result<(), io::Error> {
         if let Event::Key(key) = event::read()? {
             keybinds::handle_keybinds(key, &mut user_input, &mut todo, &mut doing, &mut done, &mut selected_column, &mut selected_index);
         }
+
+        save_tasks(&todo, &doing, &done);
     }
 }
