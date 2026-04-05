@@ -22,14 +22,16 @@ fn main() -> Result<(), io::Error> {
     let mut todo= Vec::<String>::new();
     let mut doing = Vec::<String>::new();
     let mut done = Vec::<String>::new();
+    let mut selected_column = 0;
+    let mut selected_index = 0;
 
     loop {
         terminal.draw(|frame| {
-            ui::render(frame, &user_input, &todo, &doing, &done);
+            ui::render(frame, &user_input, &todo, &doing, &done, &selected_column, &selected_index);
         })?;
 
         if let Event::Key(key) = event::read()? {
-            keybinds::handle_keybinds(key, &mut user_input, &mut todo);
+            keybinds::handle_keybinds(key, &mut user_input, &mut todo, &mut selected_column, &mut selected_index);
         }
     }
 }

@@ -1,7 +1,13 @@
 use crossterm::event::{KeyCode, KeyEvent, KeyEventKind};
 use crossterm::terminal::disable_raw_mode;
 
-pub fn handle_keybinds(key: KeyEvent, user_input: &mut String, todo_tasks: &mut Vec<String>) {
+pub fn handle_keybinds(
+    key: KeyEvent,
+    user_input: &mut String,
+    todo_tasks: &mut Vec<String>,
+    selected_column: &mut usize,
+    selected_index: &mut usize,
+) {
     let task: String = user_input.drain(..).collect();
     if key.kind == KeyEventKind::Press {
         match key.code {

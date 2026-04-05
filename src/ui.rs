@@ -1,7 +1,15 @@
 use ratatui::prelude::*;
 use ratatui::widgets::{Block, Borders, Paragraph};
 
-pub fn render(frame: &mut Frame, user_input: &str, todo: &[String], doing: &[String], done: &[String]) {
+pub fn render(
+    frame: &mut Frame,
+    user_input: &str, 
+    todo: &[String], 
+    doing: &[String], 
+    done: &[String],
+    selected_column: &usize,
+    selected_index: &usize
+){
     // Vertical Layout
     let main_container = Layout::default()
         .direction(Direction::Vertical)
