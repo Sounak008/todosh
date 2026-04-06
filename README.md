@@ -2,6 +2,14 @@
 
 A minimalist, high-performance ToDo/Kanban board for the terminal.
 
+## Showcase
+
+<video src="./Video/showcase.mp4" controls="controls" style="max-width: 100%;">
+  Your browser does not support the video tag.
+</video>
+
+---
+
 ## Keybindings
 
 | Action | Keybinding |
