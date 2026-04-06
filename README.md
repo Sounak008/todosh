@@ -4,9 +4,7 @@ A minimalist, high-performance ToDo/Kanban board for the terminal.
 
 ## Showcase
 
-<video src="./Video/showcase.mp4" controls="controls" style="max-width: 100%;">
-  Your browser does not support the video tag.
-</video>
+https://github.com/user-attachments/assets/1c3c74a3-c433-44d9-9ddb-7d7d1103b3fc
 
 ---
 
