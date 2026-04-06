@@ -12,7 +12,9 @@ use std::io;
 
 use crate::storage::{save_tasks, load_tasks};
 
+// Entry point
 fn main() -> Result<(), io::Error> {
+    // Terminal setup
     enable_raw_mode()?;
     let mut stdout = io::stdout();
     execute!(stdout, EnterAlternateScreen)?;
@@ -20,6 +22,7 @@ fn main() -> Result<(), io::Error> {
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
 
+    // App state
     let mut user_input = String::new();
 
     let data = load_tasks();
@@ -29,15 +32,19 @@ fn main() -> Result<(), io::Error> {
     let mut selected_column = 0;
     let mut selected_index = 0;
 
+    // Main loop
     loop {
+        // Draw UI
         terminal.draw(|frame| {
             ui::render(frame, &user_input, &todo, &doing, &done, &selected_column, &selected_index);
         })?;
 
+        // Handle events
         if let Event::Key(key) = event::read()? {
             keybinds::handle_keybinds(key, &mut user_input, &mut todo, &mut doing, &mut done, &mut selected_column, &mut selected_index);
         }
 
+        // Auto save
         save_tasks(&todo, &doing, &done);
     }
 }

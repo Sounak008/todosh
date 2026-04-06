@@ -1,6 +1,7 @@
 use crossterm::event::{KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 use crossterm::terminal::disable_raw_mode;
 
+// Handle keys
 pub fn handle_keybinds(
     key: KeyEvent,
     user_input: &mut String,
@@ -10,6 +11,7 @@ pub fn handle_keybinds(
     selected_column: &mut usize,
     selected_index: &mut usize,
 ) {
+    // Current length
     let current_column_len = match *selected_column {
         0 => todo_list.len(),
         1 => doing_list.len(),
@@ -18,6 +20,7 @@ pub fn handle_keybinds(
     };
     if key.kind == KeyEventKind::Press {
         match key.code {
+            // Quit app
             KeyCode::Char('q') => {
                 let _ = disable_raw_mode();
                 let _ = crossterm::execute!(
@@ -26,12 +29,14 @@ pub fn handle_keybinds(
                 );
                 std::process::exit(0);
             }
+            // Add task
             KeyCode::Enter => {
                 if !user_input.is_empty() {
                     let task: String = user_input.drain(..).collect();
                     todo_list.push(task);
                 }
             }
+            // Delete task
             KeyCode::Delete => {
                 match *selected_column {
                     0 => {
@@ -56,6 +61,7 @@ pub fn handle_keybinds(
                     *selected_index = current_column_len - 1;
                 }
             }
+            // Edit text
             KeyCode::Backspace => {
                 if !user_input.is_empty() {
                     user_input.pop();
@@ -64,8 +70,10 @@ pub fn handle_keybinds(
             KeyCode::Char(c) => {
                 user_input.push(c);
             }
+            // Move left
             KeyCode::Left => {
                 if key.modifiers.contains(KeyModifiers::SHIFT) {
+                    // Move task
                     match *selected_column {
                         2 => {
                             if !done_list.is_empty() {
@@ -82,12 +90,15 @@ pub fn handle_keybinds(
                         _ => {}
                     }
                 } else if *selected_column > 0 {
+                    // Move cursor
                     *selected_index = 0;
                     *selected_column -= 1;
                 }
             }
+            // Move right
             KeyCode::Right => {
                 if key.modifiers.contains(KeyModifiers::SHIFT) {
+                    // Move task
                     match *selected_column {
                         0 => {
                             if !todo_list.is_empty() {

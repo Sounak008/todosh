@@ -1,5 +1,6 @@
 use serde::{Serialize, Deserialize};
 
+// Task data
 #[derive(Serialize, Deserialize, Default)]
 pub struct AppData {
     pub todo: Vec<String>,
@@ -7,12 +8,14 @@ pub struct AppData {
     pub done: Vec<String>,
 }
 
+// Get path
 fn get_config_dir() -> std::path::PathBuf {
     let mut path = dirs::config_dir().unwrap_or_else(|| std::path::PathBuf::from("."));
     path.push("todosh");
     path
 }
 
+// Save tasks
 pub fn save_tasks(todo_list: &[String], doing_list: &[String], done_list: &[String]) {
     let data = AppData {
         todo: todo_list.to_vec(),
@@ -32,14 +35,17 @@ pub fn save_tasks(todo_list: &[String], doing_list: &[String], done_list: &[Stri
     std::fs::write(file_path, json).expect("Failed to write file");
 }
 
+// Load tasks
 pub fn load_tasks() -> AppData {
     let path = get_config_dir().join("tasks.json");
 
     match std::fs::read_to_string(path) {
         Ok(contents) => {
+            // Parse JSON
             serde_json::from_str(&contents).unwrap_or_else(|_| AppData::default())
         }
         Err(_) => {
+            // Default data
             AppData::default()
         }
     }

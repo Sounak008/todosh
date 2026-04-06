@@ -1,6 +1,7 @@
 use ratatui::prelude::*;
 use ratatui::widgets::{Block, Borders, List, ListItem, ListState, Paragraph};
 
+// UI Rendering
 pub fn render(
     frame: &mut Frame,
     user_input: &str,
@@ -10,6 +11,7 @@ pub fn render(
     selected_column: &usize,
     selected_index: &usize,
 ) {
+    // List items
     let todo_items: Vec<ListItem> = todo.iter().map(|s| ListItem::new(s.as_str())).collect();
     let doing_items: Vec<ListItem> = doing.iter().map(|s| ListItem::new(s.as_str())).collect();
     let done_items: Vec<ListItem> = done.iter().map(|s| ListItem::new(s.as_str())).collect();
@@ -23,7 +25,7 @@ pub fn render(
         ])
         .split(frame.area());
 
-    // Horizontal Layout inside the middle section
+    // Horizontal Layout
     let task_containers = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([
@@ -33,7 +35,7 @@ pub fn render(
         ])
         .split(main_container[1]);
 
-    // Title (Top)
+    // Title bar
     frame.render_widget(
         Paragraph::new(Line::from(Span::styled(
             " todosh ",
@@ -46,7 +48,7 @@ pub fn render(
         main_container[0],
     );
 
-    // Input Box (Bottom)
+    // Input field
     frame.render_widget(
         Paragraph::new(format!(" enter task: {}", user_input))
             .alignment(Alignment::Left)
@@ -54,13 +56,13 @@ pub fn render(
         main_container[2],
     );
 
-    // Cursor
+    // Cursor position
     let cursor_x = main_container[2].x + user_input.len() as u16 + 14;
     let cursor_y = main_container[2].y + 1;
 
     frame.set_cursor_position((cursor_x, cursor_y));
 
-    // Styling
+    // Column styles
     let (todo_color, _) = if *selected_column == 0 {
         (Color::Green, Color::Indexed(236))
     } else {
@@ -94,6 +96,7 @@ pub fn render(
         .borders(Borders::ALL)
         .border_style(Style::default().fg(done_color));
 
+    // Render lists
     let todo_list = List::new(todo_items)
         .block(todo_block)
         .highlight_symbol(Span::styled(">> ", Style::default().fg(Color::Blue)));
